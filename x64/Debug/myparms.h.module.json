@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\MyParms.h.obj",
+            "outputs": [
+                "E:\\StudyProject\\Sever_v2\\Sever_v2\\Sever_v2\\x64\\Debug\\vc145.pdb",
+                "x64\\Debug\\",
+                "E:\\StudyProject\\Sever_v2\\Sever_v2\\Sever_v2\\x64\\Debug\\MyParms.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "MyParms.h",
+                    "source-path": "e:\\studyproject\\sever_v2\\sever_v2\\sever_v2\\myparms.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

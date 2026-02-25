@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Release\\IResponsibilityChainMsg.obj",
+            "outputs": [
+                "x64\\Release\\IResponsibilityChainMsg.h_B1BE6124D8AF7DF7.ifc.dt.module.json",
+                "x64\\Release\\IResponsibilityChainMsg.h_B1BE6124D8AF7DF7.ifc.dt.d.json",
+                "x64\\Release\\IResponsibilityChainMsg.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "E:\\StudyProject\\Sever_v2\\Sever_v2\\Sever_v2\\IResponsibilityChainMsg.h",
+                    "source-path": "e:\\studyproject\\sever_v2\\sever_v2\\sever_v2\\iresponsibilitychainmsg.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+﻿  Sever_v2.cpp
+E:\StudyProject\Sever_v2\Sever_v2\Sever_v2\Sever_v2.cpp(86,25): warning C4267: “初始化”: 从“size_t”转换到“DWORD”，可能丢失数据
+  CoreMain.cpp
+  正在生成代码
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  All 135 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  Sever_v2.vcxproj -> E:\StudyProject\Sever_v2\Sever_v2\x64\Release\Sever_v2.exe

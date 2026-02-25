@@ -1,0 +1,10 @@
+﻿  正在扫描源以查找模块依赖项...
+  MassageListener.cpp
+E:\StudyProject\Sever_v2\Sever_v2\Sever_v2\MassageListener.cpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+E:\StudyProject\Sever_v2\Sever_v2\Sever_v2\MassageListener.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  (编译源文件“MassageListener.cpp”)
+  
+E:\StudyProject\Sever_v2\Sever_v2\Sever_v2\CommandEnem.h(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  (编译源文件“MassageListener.cpp”)
+  
+  Sever_v2.vcxproj -> E:\StudyProject\Sever_v2\Sever_v2\x64\Debug\Sever_v2.exe
