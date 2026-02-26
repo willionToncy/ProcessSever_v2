@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Sever_v2/Sever_v2.vcxproj" Id="3f3fa1bb-4d76-450a-9937-ef9c0d352182" />
+</Solution>

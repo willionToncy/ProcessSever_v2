@@ -1,0 +1,10 @@
+﻿  正在扫描源以查找模块依赖项...
+  CommadChanelMgr.cpp
+  DispatchMgr.cpp
+  ShareMemoryMgr.cpp
+E:\StudyProject\Sever_v2\Sever_v2\Sever_v2\CommadChanelMgr.h(23,7): error C2535: “void CommadChanelMgr::StarListenerMemory(void)”: 已经定义或声明成员函数
+  (编译源文件“CommadChanelMgr.cpp”)
+      E:\StudyProject\Sever_v2\Sever_v2\Sever_v2\CommadChanelMgr.h(18,7):
+      参见“CommadChanelMgr::StarListenerMemory”的声明
+  
+  正在生成代码...
