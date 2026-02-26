@@ -416,9 +416,12 @@ void TestCoreListening()
 
     // 3. Test ShareMemoryCommandMgr - write commands
     std::cout << "\n[2] Testing ShareMemoryCommandMgr write..." << std::endl;
-    CommandBlock cmd1 = {1, 0, 100, 0};  // type=1(SystemCall), dataSize=100
-    CommandBlock cmd2 = {2, 0, 200, 0};  // type=2(UserCall), dataSize=200
-    CommandBlock cmd3 = {5, 0, 50, 0};   // type=5(SysNotigy), dataSize=50
+    CommandBlock cmd1;
+    cmd1.type = 1; cmd1.dataOffset = 0; cmd1.dataSize = 100; cmd1.flags = 0;
+    CommandBlock cmd2;
+    cmd2.type = 2; cmd2.dataOffset = 0; cmd2.dataSize = 200; cmd2.flags = 0;
+    CommandBlock cmd3;
+    cmd3.type = 5; cmd3.dataOffset = 0; cmd3.dataSize = 50; cmd3.flags = 0;
     
     if (cmdMgr->WriteRequestNextCommand(cmd1)) {
         std::cout << "   Write cmd1 OK (type=1, SystemCall)" << std::endl;
@@ -475,8 +478,10 @@ void TestCoreListening()
     std::cout << "   CommadChanelMgr init OK" << std::endl;
 
     // Write test commands for listener thread
-    CommandBlock listenCmd1 = {101, 0, 10, 0};  // type=101(Final)
-    CommandBlock listenCmd2 = {102, 0, 20, 0};  // type=102(Stop)
+    CommandBlock listenCmd1;
+    listenCmd1.type = 101; listenCmd1.dataOffset = 0; listenCmd1.dataSize = 10; listenCmd1.flags = 0;
+    CommandBlock listenCmd2;
+    listenCmd2.type = 102; listenCmd2.dataOffset = 0; listenCmd2.dataSize = 20; listenCmd2.flags = 0;
     cmdMgr->WriteRequestNextCommand(listenCmd1);
     cmdMgr->WriteRequestNextCommand(listenCmd2);
     std::cout << "   Written 2 test commands to shared memory" << std::endl;

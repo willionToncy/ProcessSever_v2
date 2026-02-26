@@ -45,6 +45,9 @@
     <ClCompile Include="DispatchMgr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ExecuteChainMgr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShareMonyDate.h">
@@ -87,6 +90,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IResponsibilityChainMsg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteChainMgr.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

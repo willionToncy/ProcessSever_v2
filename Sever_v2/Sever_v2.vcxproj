@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="CommadChanelMgr.cpp" />
     <ClCompile Include="DispatchMgr.cpp" />
+    <ClCompile Include="ExecuteChainMgr.cpp" />
     <ClCompile Include="ShareMemoryCommandMgr.cpp" />
     <ClCompile Include="EventSystem.cpp" />
     <ClCompile Include="MassageListener.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="CommadChanelMgr.h" />
     <ClInclude Include="CommandEnem.h" />
     <ClInclude Include="DispatchMgr.h" />
+    <ClInclude Include="ExecuteChainMgr.h" />
     <ClInclude Include="IResponsibilityChainMsg.h" />
     <ClInclude Include="ShareMemoryCommandMgr.h" />
     <ClInclude Include="CoreMessage.h" />

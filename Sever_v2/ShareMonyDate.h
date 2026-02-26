@@ -43,6 +43,7 @@ struct CommandBlock {
     uint32_t type;               //指令类型
     uint32_t dataOffset;         //数据区偏移
     uint32_t dataSize;           //数据区的大小
+    uint32_t RunModel;           //执行模式决定此条指令的具体数据区内的指令按什么方式执行
     uint32_t flags;              //附加控制信息，暂时不启用预留
 };
 
