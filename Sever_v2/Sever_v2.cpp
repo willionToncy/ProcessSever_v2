@@ -6,12 +6,16 @@
 #include <thread>
 #include <chrono>
 #include <windows.h>
+#include <cstring>
 #include "CoreMain.h"
 #include "SharedMemoryDateManager.h"
 #include "MyParms.h"
 #include "MassageListener.h"
 #include "EventSystem.h"
 #include "ShareMemoryCommandMgr.h"
+#include "ShareMemoryMgr.h"
+#include "CommadChanelMgr.h"
+#include "DispatchMgr.h"
 
 void TestSharedMemory() {
     try {
@@ -386,10 +390,137 @@ void TestShareMemoryCommandMgr()
     std::cout << "===========================================" << std::endl;
 }
 
+//Test new IPC micro-architecture
+void TestCoreListening() 
+{
+    std::cout << "===========================================" << std::endl;
+    std::cout << "    IPC Micro-Architecture Test" << std::endl;
+    std::cout << "===========================================" << std::endl;
+
+    // 1. Test ShareMemoryMgr - unified shared memory management
+    std::cout << "\n[1] Testing ShareMemoryMgr..." << std::endl;
+    ShareMemoryMgr* shareMemoryMgr = new ShareMemoryMgr();
+    shareMemoryMgr->Init();
+    std::cout << "   ShareMemoryMgr init OK" << std::endl;
+
+    // 2. Get command and data managers
+    ShareMemoryCommandMgr* cmdMgr = shareMemoryMgr->GetShareMemoryCommandMgr();
+    SharedMemoryDateManager* dateMgr = shareMemoryMgr->GetShareMemoryDateManager();
+    
+    if (cmdMgr == nullptr || dateMgr == nullptr) {
+        std::cout << "   ERROR: Failed to get manager instances" << std::endl;
+        delete shareMemoryMgr;
+        return;
+    }
+    std::cout << "   Command and Data managers OK" << std::endl;
+
+    // 3. Test ShareMemoryCommandMgr - write commands
+    std::cout << "\n[2] Testing ShareMemoryCommandMgr write..." << std::endl;
+    CommandBlock cmd1 = {1, 0, 100, 0};  // type=1(SystemCall), dataSize=100
+    CommandBlock cmd2 = {2, 0, 200, 0};  // type=2(UserCall), dataSize=200
+    CommandBlock cmd3 = {5, 0, 50, 0};   // type=5(SysNotigy), dataSize=50
+    
+    if (cmdMgr->WriteRequestNextCommand(cmd1)) {
+        std::cout << "   Write cmd1 OK (type=1, SystemCall)" << std::endl;
+    }
+    if (cmdMgr->WriteRequestNextCommand(cmd2)) {
+        std::cout << "   Write cmd2 OK (type=2, UserCall)" << std::endl;
+    }
+    if (cmdMgr->WriteRequestNextCommand(cmd3)) {
+        std::cout << "   Write cmd3 OK (type=5, SysNotigy)" << std::endl;
+    }
+
+    // 4. Test ShareMemoryCommandMgr - read commands (chase design)
+    std::cout << "\n[3] Testing ShareMemoryCommandMgr read..." << std::endl;
+    int readCount = 0;
+    while (true) {
+        CommandBlock readCmd = cmdMgr->ReadRequestNextCommand();
+        if (readCmd.type == 0) {
+            break;  // No data
+        }
+        readCount++;
+        std::cout << "   Read cmd" << readCount << ": type=" << readCmd.type 
+                  << ", dataSize=" << readCmd.dataSize << std::endl;
+    }
+    std::cout << "   Total " << readCount << " commands read" << std::endl;
+
+    // 5. Test SharedMemoryDateManager - write data
+    std::cout << "\n[4] Testing SharedMemoryDateManager write..." << std::endl;
+    const char* testData = "Hello IPC Micro-Architecture!";
+    DWORD dataSize = static_cast<DWORD>(strlen(testData)) + 1;
+    
+    if (dateMgr->WriteRequest(testData, dataSize, 1001, 1)) {
+        std::cout << "   Write data OK: " << testData << std::endl;
+    } else {
+        std::cout << "   Write data FAILED" << std::endl;
+    }
+
+    // 6. Test SharedMemoryDateManager - read data
+    std::cout << "\n[5] Testing SharedMemoryDateManager read..." << std::endl;
+    char readBuffer[256] = {0};
+    DWORD outCommandId = 0;
+    DWORD outDataType = 0;
+    
+    if (dateMgr->ReadRequest(readBuffer, sizeof(readBuffer), outCommandId, outDataType)) {
+        std::cout << "   Read data OK: " << readBuffer << std::endl;
+        std::cout << "   commandId=" << outCommandId << ", dataType=" << outDataType << std::endl;
+    } else {
+        std::cout << "   Read data FAILED" << std::endl;
+    }
+
+    // 7. Test CommadChanelMgr - async listener
+    std::cout << "\n[6] Testing CommadChanelMgr async listener..." << std::endl;
+    CommadChanelMgr* channelMgr = new CommadChanelMgr();
+    channelMgr->Init();
+    std::cout << "   CommadChanelMgr init OK" << std::endl;
+
+    // Write test commands for listener thread
+    CommandBlock listenCmd1 = {101, 0, 10, 0};  // type=101(Final)
+    CommandBlock listenCmd2 = {102, 0, 20, 0};  // type=102(Stop)
+    cmdMgr->WriteRequestNextCommand(listenCmd1);
+    cmdMgr->WriteRequestNextCommand(listenCmd2);
+    std::cout << "   Written 2 test commands to shared memory" << std::endl;
+
+    // Start listener thread
+    channelMgr->StarListenerMemory();
+    std::cout << "   Listener thread started" << std::endl;
+
+    // Wait for listener to process
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::cout << "   Waited 100ms for listener..." << std::endl;
+
+    // Stop listener thread
+    channelMgr->StopListenerMemory();
+    std::cout << "   Listener thread stopped" << std::endl;
+
+    // 8. Verify chase design
+    std::cout << "\n[7] Verifying chase design..." << std::endl;
+    CommandBlock remainingCmd = cmdMgr->ReadRequestNextCommand();
+    if (remainingCmd.type == 0) {
+        std::cout << "   OK: All commands read by listener" << std::endl;
+    } else {
+        std::cout << "   Note: Remaining command (type=" << remainingCmd.type << ")" << std::endl;
+    }
+
+    // 9. Status query test
+    std::cout << "\n[8] Testing status query..." << std::endl;
+    std::cout << "   ShmSize: " << dateMgr->GetShmSize() << " bytes" << std::endl;
+    std::cout << "   BlockCount: " << dateMgr->GetBlockCount() << std::endl;
+    std::cout << "   BlockSize: " << dateMgr->GetBlockSize() << " bytes" << std::endl;
+    std::cout << "   Version: " << dateMgr->GetVersion() << std::endl;
+
+    // Cleanup
+    delete channelMgr;
+    delete shareMemoryMgr;
+
+    std::cout << "\n===========================================" << std::endl;
+    std::cout << "    IPC Micro-Architecture Test Complete!" << std::endl;
+    std::cout << "===========================================" << std::endl;
+}
+
 int main()
 {
-    TestShareMemoryCommandMgr();
-
+    TestCoreListening();
     std::cout << "\nplease enter any Key to exit";
     std::cin.get();
     return 0;
